@@ -276,3 +276,6 @@ workflow, not in a hardening sprint at the end.
 
 *Refs: PDPA B.E. 2562 · Computer Crime Act B.E. 2550 §3, §26, §27 (fine ≤ 500,000 THB) ·
 Electronic Transactions Act B.E. 2544 §9, §26, §28, §§32–34 · ETDA "Digital Thailand AI Ethics Guideline" (2019).*
+
+
+note Athichon kaewla 6631503046 wrote it.
