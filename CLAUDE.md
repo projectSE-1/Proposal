@@ -2,156 +2,76 @@
 
 ## Project
 
-AI Perfumery Engine — ระบบผู้ช่วยคำนวณและออกแบบกลิ่นน้ำหอมด้วยฟิสิกส์เคมี
+**AI Perfumery Engine** — ระบบผู้ช่วยคำนวณและออกแบบกลิ่นน้ำหอมด้วยฟิสิกส์เคมี. A calculation engine (100-material dataset; synergy, masking, evaporation, threshold, and material-group rules) shown on a dashboard, wrapped in accounts, saved formulas, evaluation panels, and agreements.
 
-## Product Context
+## Documentation map — read before acting
 
-The AI Perfumery Engine uses a chemical/physical dataset of 100 aroma materials.
+| Need to know... | Read |
+|---|---|
+| Background/product context (**not** authoritative) | `.docs/00-context/project-context.md` |
+| Approved requirements | `.docs/01-requirements/backlog.md` |
+| Approved design (features, journeys, prototype, diagrams) | `.docs/02-design/` |
+| Legal/compliance rules (authoritative) | `.docs/03-compliance/rule.md` |
+| Legal requirements traced from W2 | `.docs/03-compliance/legal-requirements.md` |
 
-The engine applies:
-- Synergy rules
-- Masking rules
-- Evaporation over time
-- Thresholds
-- Material groups
+**Authority order when sources conflict:** law/regulation → `rule.md` → `backlog.md` → `.docs/02-design/` → existing `src/` → `project-context.md` → your own assumptions. If information is missing, say `insufficient information` — never invent a requirement or a domain rule.
 
-The system displays predicted results through a dashboard.
+## Read `.docs/03-compliance/rule.md` before touching
 
-The surrounding system includes:
-- User accounts
-- Login
-- Saved formulas
-- Evaluation panels
-- Agreements
-
-## Core Data
-
-The system contains:
-
-### Personal Data
-Examples:
-- User name
-- Email
-- Role
-- Formula creator/editor
-- Client brief contact
-- Panel tester identity
-- Interview notes
-
-### Sensitive Personal Data
-
-Examples:
-- Allergy/sensitisation information
-- Patch-test results
-- Pregnancy status
-- Religion-revealing preferences
-
-### Owner Intellectual Property
-
-The following are confidential:
-- 100-material dataset
-- Interaction rules
-- Thresholds
-- Material groups
-- Saved formulas
-
-These must not be sent to unapproved third-party AI/API/cloud services.
-
-## Security Rules
-
-- Never expose passwords or sensitive personal data.
-- Perform authorization on the server.
-- Do not rely only on client-side UI restrictions.
-- Do not expose confidential formula information.
-- Do not commit the real material dataset to a public repository.
-- Do not send confidential product data to unapproved external services.
-
-## Privacy
-
-Personal-data features must follow `rule.md`.
-
-Before storing personal data:
-- Record consent.
-- Define the purpose.
-- Apply data minimisation.
-- Define retention.
-- Provide appropriate user data rights.
-
-Sensitive personal data requires explicit owner approval before implementation.
-
-## Access Logging
-
-If authentication exists, the system must implement the access logging requirements defined in `rule.md`.
-
-Important actions include:
-- Login
-- Logout
-- Password changes
-- Permission changes
-- Formula creation/update/deletion
-- Calculation runs
-- Export/download
-- Administrative access to another user's data
-
-Access logs must follow the retention and append-only requirements in `rule.md`.
-
-## Electronic Agreements
-
-Agreements and approvals must follow the requirements in `rule.md`.
-
-The system must preserve:
-- Signer identity
-- Timestamp
-- Document version
-- Document hash
-- Authentication method
-- Relevant signing metadata
-
-High-risk actions require stronger authentication according to `rule.md`.
-
-## AI / Calculation Rules
-
-The calculation engine must be explainable.
-
-Every calculated result should identify:
-- The rules used
-- Relevant thresholds
-- Source data
-
-If the engine has insufficient information, it must return:
-
-"insufficient data"
-
-It must not guess unsupported chemical/material interactions.
-
-Changes to chemistry rules, thresholds, or material groups require approval from the domain expert.
-
-Rule changes must be versioned.
-
-Stored calculations must record the applicable rule version.
-
-## Offline/Core Workflow
-
-The core workflow should remain usable when an AI/model service is unavailable.
-
-## Compliance Source
-
-`rule.md` is the authoritative project-specific legal and compliance rule file.
-
-Before modifying features involving:
-- Personal data
-- Access logs
-- Agreements
-- Owner IP
+- Personal data (accounts, formula creator/editor, client contacts, panel-tester identity, interview notes)
+- Sensitive personal data (allergy, patch-test, pregnancy, religion-revealing preferences) — needs explicit owner approval before implementation, not just a read
+- Access logs (login/logout, password/permission changes, formula CRUD, calculation runs, exports, admin access to another user's data)
+- Agreements / e-signatures
+- Owner IP (100-material dataset, interaction rules, thresholds, material groups, saved formulas)
 - AI-generated results
 
-read and follow `rule.md`.
+## Non-negotiable rules
 
-## Development Principles
+- Never send owner IP (dataset, rules, thresholds, formulas) to an unapproved third-party AI/API/cloud service.
+- Never commit the real material dataset to a public repo, gist, screenshot, or demo deploy.
+- Enforce authorization server-side; never rely on client-side UI hiding.
+- Never expose passwords or sensitive personal data — including in logs, error messages, or AI prompts.
+- The calculation engine must be explainable: every result cites the rules, thresholds, and source data used. If it lacks enough information, return `insufficient data` — never guess a chemical/material interaction.
+- Chemistry rules, thresholds, and material groups change only with domain-expert approval; every change is versioned, and stored calculations record the rule version applied.
+- The core formulation/calculation workflow must keep working if the AI/model service is down.
 
-- Do not invent requirements that are not supported by the product requirements or `rule.md`.
-- Prefer data minimisation.
-- Keep confidential data inside approved infrastructure.
-- Add tests for important business logic.
-- Document security-sensitive changes.
-- Keep requirements traceable to implementation and audit items.
+## Development principles
+
+- Do not invent requirements beyond `backlog.md` and `rule.md`.
+- Prefer data minimisation; keep confidential data inside approved infrastructure.
+- Add tests for business logic; document security-sensitive changes.
+- Keep requirements traceable: backlog → design → compliance → implementation → test.
+- Follow the AI-native SDLC in `project-context.md` (§21–24): don't start significant implementation until a task is "ready" (clear problem, user, behavior, acceptance criteria, no open domain/legal decisions). Surface unresolved decisions instead of assuming.
+
+## Lecturer-Facing Deliverables
+
+The following files/folders are the main deliverables intended for lecturer review:
+
+1. `proposal/proposal.md`
+   - Updated project proposal
+   - Problem statement and target users
+
+2. `.docs/01-requirements/backlog.md`
+   - Product Backlog
+
+3. `.docs/02-design/`
+   - Design draft
+   - Feature list
+   - User journey
+   - Prototype
+   - Required diagrams
+
+4. `.docs/03-compliance/rule.md`
+   - Project rules and compliance requirements
+
+5. `.docs/03-compliance/legal-requirements.md`
+   - Legal requirements traced from the Week 2 legal research
+
+These documents should be kept clear, consistent, and suitable for lecturer review.
+
+Other files such as:
+- `CLAUDE.md`
+- `.docs/00-context/project-context.md`
+- `.claude/skills/`
+
+are primarily working/context files for the development process and are not the main lecturer-facing deliverables unless the lecturer specifically requests them.
