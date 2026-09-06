@@ -56,32 +56,25 @@ Section 0 is the priority table; Sections 4–9 are the full requirement entries
 
 ## 1. Problem Statement
 
-Our stakeholder is a cosmetic-science student who formulates fragrance for a living and is our
-real customer for this project. In her own words, the core problem is that "fragrance
-formulation is complex and requires formulators to keep track of many pieces of information at
-once." She named five concrete ways this shows up: too many ingredients and properties to hold
-in her head at once; manual arithmetic for weights, percentages, and totals that she then has to
-double-check by hand; compliance rules that are scattered and easy to miss; an ingredient list
-that, by itself, doesn't tell her what actually matters in a formula or what's risky about it; and
-no way to check a formula before she physically mixes it, so mistakes surface only after the fact.
+Fragrance formulation requires a formulator to track many pieces of information at once —
+ingredients, concentrations, quantities, and restrictions — while calculating and checking
+compliance by hand, with no way to catch a mistake before physically mixing a formula. Section 3
+breaks this into the five specific pain points it comes from; Section 2 identifies the persona.
 
-Her framing of what would help: a program that "helps formulators understand and evaluate
-fragrance formulas by automatically calculating formula information and highlighting relevant
-rules and restrictions." That sentence is the anchor for this backlog. Everything below either
-implements a piece of it or exists because `rule.md`/`CLAUDE.md` require it once the workflow
-below (which needs a login and stored formulas) exists at all.
+Needed outcome, in the stakeholder's own words: a program that "helps formulators understand and
+evaluate fragrance formulas by automatically calculating formula information and highlighting
+relevant rules and restrictions." Every requirement below implements a piece of that sentence or
+exists because `rule.md`/`CLAUDE.md` require it once the workflow needs a login and stored
+formulas.
 
-This is a bespoke tool built for this one customer's own internal use, not a public platform. The
-reference product examined earlier (fragrance-engine.com) lets any signed-up user generate and
-order a custom fragrance; this system deliberately does not offer that. There is also no
-generative-AI/LLM feature in this build — the calculation engine is deterministic physics/
-chemistry logic operating on an internal dataset, confirmed via stakeholder meetings recorded in
-`project-context.md` §17 (2026-09-02).
+*(Stakeholder identity, interview context, and sourcing are recorded in `project-context.md`
+§3–§4, not repeated here.)*
 
 ## 2. Users
 
 - **Formulator (Lab User)** — the primary persona, and the only one with direct evidence from a
-  real interview. This is the cosmetic-science student described above. All FR/NFR/CER items in
+  real interview: a cosmetic-science student who formulates fragrance and is our real customer
+  for this project (interviewed 2026-09-02; see `project-context.md` §3–§4). All FR/NFR/CER items in
   this backlog are written for her.
 - **Domain Expert** — governs approval of chemistry rules, thresholds, and material-group
   changes. Not evidenced by the interview itself; sourced from `CLAUDE.md` and `rule.md`, which
