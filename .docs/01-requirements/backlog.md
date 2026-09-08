@@ -58,7 +58,7 @@ Section 0 is the priority table; Sections 4–9 are the full requirement entries
 Fragrance formulation requires a formulator to track many pieces of information at once —
 ingredients, concentrations, quantities, and restrictions — while calculating and checking
 compliance by hand, with no way to catch a mistake before physically mixing a formula. Section 3
-breaks this into the five specific pain points it comes from; Section 2 identifies the persona.
+breaks this into the four specific pain points it comes from; Section 2 identifies the persona.
 
 Needed outcome, in the stakeholder's own words: a program that "helps formulators understand and
 evaluate fragrance formulas by automatically calculating formula information and highlighting
@@ -75,8 +75,9 @@ formulas.
   real interview: a cosmetic-science student who formulates fragrance and is our real customer
   for this project (interviewed 2026-09-02; see `project-context.md` §3–§4). All FR/NFR/CER items in
   this backlog are written for her.
-- **Domain Expert** — supplies the material/rule dataset the engine operates on (rule.md §0).
-  Not evidenced by the interview itself; no in-app workflow this cycle.
+- **Domain Expert** — supplies the material/rule dataset the engine operates on (rule.md §0; its
+  structure is documented in `.docs/00-context/dataset-structure.md`). Not evidenced by the
+  interview itself; no in-app workflow this cycle.
 - **Administrator** — referenced in `project-context.md` §4 as a possible role. No admin-specific
   workflow is evidenced by the interview, and none is designed in this backlog beyond the
   server-side authorization guardrail that applies to any role (SEC-001). Open Question below.
@@ -85,7 +86,7 @@ formulas.
 
 ## 3. Interview Pain Points
 
-Source for all five: real interview, 2026-09-02, with the stakeholder described above (also
+Source for all four: real interview, 2026-09-02, with the stakeholder described above (also
 recorded in `.docs/00-context/project-context.md` §3).
 
 | # | Pain point (paraphrased from interview) | Requirements addressing it |
@@ -93,8 +94,7 @@ recorded in `.docs/00-context/project-context.md` §3).
 | 1 | Too much information to track — many ingredients, concentrations, quantities, properties/restrictions. | FR-003, NFR-001 |
 | 2 | Manual calculation — weight, percentage/concentration, totals, checking correctness by hand. | FR-004, CER-001 |
 | 3 | Rule/compliance checking is complicated — which rules apply, checking limits, easy to overlook something. | FR-005, FR-006, CER-001, CER-002 |
-| 4 | Hard to understand a formula quickly — a long list alone doesn't show composition, what matters most, or what's risky. | FR-003, FR-006, NFR-001 |
-| 5 | Needs to calculate/check before physically mixing, rather than discovering a problem afterward. | FR-007, NFR-002 |
+| 4 | Needs to calculate/check before physically mixing, rather than discovering a problem afterward. | FR-007, NFR-002 |
 
 Main pain-point framing ("fragrance formulation is complex and requires formulators to keep
 track of many pieces of information at once") and the solution framing ("automatically
@@ -178,8 +178,8 @@ User is authenticated (FR-001).
 ### FR-003: Formula Detail View — Full Information in One Place
 
 **Problem:**
-Pain points 1 and 4: too much to track, and a long ingredient list alone doesn't show what's in
-a formula, how much, what matters most, or what's risky.
+Pain point 1: too much to track at once — many ingredients, each with its own concentration,
+quantity, and restrictions.
 
 **User:**
 Formulator.
@@ -205,7 +205,7 @@ groups, rules, thresholds) needed to evaluate it.
 - Given a material for which the engine has no covering rule, then that item shows
   "insufficient data" rather than being silently omitted or guessed (rule.md rule 59; CER-002).
 
-**Traceability:** Interview pain points 1 and 4; approved core workflow.
+**Traceability:** Interview pain point 1; approved core workflow.
 
 ---
 
@@ -257,7 +257,9 @@ check applicable restrictions/limits from the approved rule set and visibly dist
 "within limit," "at or near limit," "over limit," and "insufficient data."
 
 **Precondition:**
-Rule/threshold data exists for the relevant material(s) in the approved dataset.
+Rule/threshold data exists for the relevant material(s) in the approved dataset. In the sample
+supplied by the stakeholder, restriction data comes from the IFRA Standards (51st Amendment) and
+the per-substance `EU CosIng` status — see `.docs/00-context/dataset-structure.md`.
 
 **Main Flow:**
 1. Formula is opened (FR-003).
@@ -278,8 +280,8 @@ Rule/threshold data exists for the relevant material(s) in the approved dataset.
 ### FR-006: Explanation of Calculated/Flagged Results
 
 **Problem:**
-Pain points 3 and 4 together: the user needs to trust and quickly understand why something is
-flagged, not just see a flag with no context.
+Pain point 3: the user needs to trust and quickly understand why something is flagged, not just
+see a flag with no context.
 
 **User:**
 Formulator.
@@ -301,14 +303,14 @@ The engine has produced a result via FR-004/FR-005.
   the system shows the rule(s)/threshold(s)/source data used — no unexplained figure (rule.md
   rule 58; CLAUDE.md AI/Calculation Rules).
 
-**Traceability:** Interview pain points 3 and 4; rule.md rule 58.
+**Traceability:** Interview pain point 3; rule.md rule 58.
 
 ---
 
 ### FR-007: In-Place "What-If" Editing With Recalculation
 
 **Problem:**
-Pain point 5: the formulator wants to evaluate a formula before physically mixing it, instead of
+Pain point 4: the formulator wants to evaluate a formula before physically mixing it, instead of
 discovering a calculation mistake or rule violation only afterward.
 
 **User:**
@@ -337,7 +339,7 @@ Questions.)
 - Given a trial edit that pushes a material over a threshold, then the corresponding rule flag
   updates and cites the rule/threshold per FR-006.
 
-**Traceability:** Interview pain point 5; confirmed scope decision 2 (in-place editing/
+**Traceability:** Interview pain point 4; confirmed scope decision 2 (in-place editing/
 recalculation explicitly in scope as an extension of viewing/evaluating; full formula authoring
 from an empty state is explicitly out of scope this cycle).
 
@@ -349,7 +351,7 @@ from an empty state is explicitly out of scope this cycle).
 Confirmed scope decision 2 states export of what's displayed is in scope as an extension of the
 viewing/evaluating workflow. This supports the formulator taking the calculated, rule-checked
 formula view to use at the point of actually weighing materials (connects to pain points 2 and
-5, though export itself was not a phrase used in the interview — flagged here for honesty about
+4, though export itself was not a phrase used in the interview — flagged here for honesty about
 sourcing).
 
 **User:**
@@ -390,8 +392,8 @@ The formula detail view must present composition, quantities, and applicable res
 without requiring navigation to a separate page per material.
 
 **Reason:**
-Interview pain point 4 — "a long ingredient list alone doesn't show what's in it... or whether
-anything is potentially problematic."
+Interview pain point 1 — too much information to hold at once. Splitting a formula across a page
+per material makes that worse, not better.
 
 **Acceptance Criteria:**
 - A user can identify a formula's materials, each one's share of the formula, and any flagged
@@ -407,7 +409,7 @@ Recalculation triggered by an in-place edit (FR-007) must render in the same vie
 page reload or an explicit save step.
 
 **Reason:**
-Interview pain point 5 — evaluating a formula before physically mixing loses its point if
+Interview pain point 4 — evaluating a formula before physically mixing loses its point if
 checking a "what if" requires a save-and-reload cycle.
 
 **Acceptance Criteria:**

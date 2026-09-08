@@ -9,6 +9,7 @@
 | Need to know... | Read |
 |---|---|
 | Background/product context (**not** authoritative) | `.docs/00-context/project-context.md` |
+| What the supplied dataset contains (structure, not values) | `.docs/00-context/dataset-structure.md` |
 | Approved requirements | `.docs/01-requirements/backlog.md` |
 | Approved design (features, journeys, prototype, diagrams) | `.docs/02-design/` |
 | Legal/compliance rules (authoritative) | `.docs/03-compliance/rule.md` |

@@ -5,26 +5,34 @@
 
 ## Problem Statement
 
-Fragrance formulation requires a formulator to track many pieces of information at once —
-ingredients, concentrations, quantities, and restrictions — while calculating and checking
-compliance by hand, with no reliable way to catch a mistake before physically mixing a formula.
+Before a fragrance formula is safe to mix, a formulator has to know what is in it, work out the
+quantities, check the restrictions, spot anything wrong, and finish all of that before touching
+real material. Every one of those steps is currently done by hand.
 
-This was confirmed through a real interview with our stakeholder (2026-09-02; full writeup in
-`.docs/00-context/project-context.md` §3), who named five concrete pain points:
+This was confirmed in a real interview with our stakeholder (2026-09-02; full writeup in
+`.docs/00-context/project-context.md` §3). The four pain points named there follow the same order
+as that workflow:
 
-1. Too much information to track across many ingredients and properties at once.
-2. Manual calculation of weight, percentage, and totals, then checking it by hand.
-3. Rule/compliance checking that is complicated and easy to get wrong or overlook.
-4. A formula's ingredient list, on its own, doesn't show what matters most or what's risky.
-5. No way to check a formula before physically mixing it — mistakes surface only afterward.
+1. **Holding it all at once.** One formula has many ingredients, each with its own concentration,
+   quantity, and restrictions.
+2. **Doing the math by hand.** Weights, percentages, and totals are calculated manually, then
+   checked manually for mistakes.
+3. **Checking restrictions by hand.** Knowing which limit applies to which ingredient is
+   complicated, and something is easy to overlook.
+4. **Finding out too late.** None of this happens before mixing, so a wrong number or a missed
+   restriction only appears once real material has been spent.
+
+Points 1 to 3 cost time. Point 4 is the expensive one: the formulator can do everything right and
+still miss a problem, or catch it only after the batch already exists.
 
 ## Target Users
 
 - **Formulator** (primary persona, evidenced by a real interview): a fragrance formulator who
   needs to understand and evaluate a formula quickly and correctly before committing to it
   physically.
-- **Domain Expert**: approves changes to chemistry rules, thresholds, and material groups. Not
-  evidenced by the interview itself; required by our own compliance rules (`rule.md`).
+
+The material and rule dataset is supplied by a domain expert outside the system (`rule.md` §0).
+That role does not use the product itself, so it is not a target user for this build cycle.
 
 ## Proposed Solution
 
@@ -34,6 +42,13 @@ understand and evaluate it without manual calculation or guesswork. This is a be
 deterministic tool for one real customer's internal use: it does not offer public
 formula-generation-and-ordering, and it does not use any generative-AI/LLM feature (confirmed via
 stakeholder meetings, `project-context.md` §17).
+
+The stakeholder has supplied a sample of the material data in the format the full set follows: 10
+substances with 34 fields each, covering chemical identity, measured physical properties
+(including vapour pressure and Antoine coefficients), odour descriptors and detection thresholds,
+and regulatory status. Restrictions trace to the IFRA Standards, 51st Amendment, and to EU CosIng
+status per substance. Structure is documented in `.docs/00-context/dataset-structure.md`; the data
+itself stays out of this repository.
 
 ## Scope for This Build Cycle
 

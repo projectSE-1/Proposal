@@ -89,7 +89,7 @@ Main pain point, in the stakeholder's own framing:
 > Fragrance formulation is complex and requires formulators to keep track of many pieces of
 > information at once.
 
-This breaks down into five concrete sub-problems she identified:
+This breaks down into four concrete sub-problems she identified:
 
 1. **Too much information to track** — many ingredients, different concentrations, different
    quantities, different properties/restrictions.
@@ -97,10 +97,7 @@ This breaks down into five concrete sub-problems she identified:
    and checking whether the values are correct.
 3. **Rule/compliance checking is complicated** — knowing which rules apply to which
    ingredients, checking limits/restrictions, easy to overlook something.
-4. **Hard to understand a formula quickly** — a long ingredient list alone doesn't show what's
-   in it, how much of it, which ingredients matter most, what restrictions apply, or whether
-   anything is potentially problematic.
-5. **Needing to calculate/check before physically mixing** — a formulator may want to evaluate
+4. **Needing to calculate/check before physically mixing** — a formulator may want to evaluate
    a formula first, rather than discover a calculation mistake or a rule violation only after
    physically mixing materials.
 
