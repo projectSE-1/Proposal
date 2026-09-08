@@ -1001,7 +1001,6 @@ The following should be treated as unresolved unless confirmed in authoritative 
 * Exact final feature list
 * Exact four diagram types
 * Exact database schema
-* Exact technology stack
 * Exact calculation equations
 * Exact evaporation model
 * Exact synergy model

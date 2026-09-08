@@ -1,10 +1,17 @@
 # Diagrams (D1–D4)
 
 All four diagrams describe the same system and the same one core workflow as
-`feature-list.md`/`user-journey.md`: actors **Formulator** and **Domain Expert**, system
-**AI Perfumery Engine**. Rendered as Mermaid (GitHub and most Markdown viewers render these
-natively); source diagram tool alternatives (draw.io/Figma/PlantUML) can replace these later
-without changing what they show.
+`feature-list.md`/`user-journey.md`: primary actor **Formulator**, system **AI Perfumery Engine**.
+Rendered as Mermaid (GitHub and most Markdown viewers render these natively); source diagram tool
+alternatives (draw.io/Figma/PlantUML) can replace these later without changing what they show.
+
+**Domain Expert** appears only in D1, as the external source of the material/rule dataset (rule.md
+rule 11) — not as a system use case. This build cycle has no in-app "approve rule/threshold
+change" flow: LR3 (`backlog.md`) confirms no production-approval flow is in scope this cycle, and
+`feature-list.md`/`user-journey.md` have no domain-expert use case. CER-003 (rule versioning + a
+recorded approval before a rule change is applied) still holds as a data-model requirement — the
+approval can happen out-of-band (the same channel the domain expert already uses to supply the
+dataset), it just isn't a UI feature this cycle.
 
 ## D1 — System Context
 
@@ -19,7 +26,7 @@ flowchart LR
     Dataset[(Material & Rule Dataset)]
 
     Formulator -->|logs in, views & evaluates formulas| System
-    DomainExpert -->|approves rule/threshold/group changes| System
+    DomainExpert -->|supplies & approves dataset/rules, out-of-band| Dataset
     System -->|reads/writes| Dataset
 
     classDef actor fill:#fff,stroke:#333,stroke-width:2px,font-weight:bold;
@@ -28,19 +35,18 @@ flowchart LR
 ## D2 — Use Case
 
 What it shows: which actor can do what. The core use case ("View & evaluate a formula") is
-central and includes Login, matching the journey's step order.
+central and includes Login, matching the journey's step order. Domain Expert is not shown here —
+this cycle has no in-app use case for that role (see note above).
 
 ```mermaid
 flowchart LR
     Formulator[Formulator]:::actor
-    DomainExpert[Domain Expert]:::actor
     subgraph SYS["AI Perfumery Engine"]
         UC1([Login])
         UC2([View formula list])
         UC3([View & evaluate a formula])
         UC4([Adjust value & recalculate])
         UC5([Export formula view])
-        UC6([Approve rule/threshold change])
     end
 
     Formulator --- UC1
@@ -48,32 +54,33 @@ flowchart LR
     Formulator --- UC3
     Formulator --- UC4
     Formulator --- UC5
-    DomainExpert --- UC6
 
-    UC3 -.include.-> UC1
     UC2 -.include.-> UC1
+    UC3 -.include.-> UC1
+    UC4 -.include.-> UC1
+    UC5 -.include.-> UC1
 
     classDef actor fill:#fff,stroke:#333,stroke-width:2px,font-weight:bold;
 ```
 
 ## D3 — High-Level Architecture
 
-What it shows: layers and data direction, kept deliberately generic (no framework named) since
-no technology stack has been decided yet (`project-context.md` §29) — this diagram must not be
-read as a stack decision.
+What it shows: layers and data direction, now naming the chosen stack (table below) — this
+supersedes the earlier "no stack decided yet" placeholder (`project-context.md` §29 is stale on
+this point as of this decision).
 
 ```mermaid
 flowchart LR
     subgraph Client
-        UI[Web UI]
+        UI[Next.js + TypeScript]
     end
     subgraph Server
-        API[REST API]
-        AUTH[Login + Access Log]
+        API[Go + Gin — REST API]
+        AUTH[Auth + Access Log]
         ENGINE[Calculation Engine]
     end
     subgraph Database
-        DB[(Formulas, Materials, Rules,<br/>Accounts, Consent, Access Log)]
+        DB[(PostgreSQL via sqlc + pgx:<br/>Formulas, Materials, Rules,<br/>Accounts, Consent, Access Log)]
     end
 
     UI -->|HTTPS| API
@@ -82,6 +89,25 @@ flowchart LR
     AUTH --> DB
     ENGINE --> DB
 ```
+
+### Tech Stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Frontend | Next.js + TypeScript | Strong web UI, routing, forms, SSR when useful, excellent TypeScript ecosystem |
+| Backend | Go + Gin | Simple, fast, strongly typed, excellent for APIs and calculation/business logic |
+| Database | PostgreSQL | Excellent relational modeling, constraints, transactions, JSON support |
+| DB access | sqlc + pgx | Type-safe SQL without hiding SQL behind a heavy ORM |
+| API | REST | Simple and appropriate for this product |
+| Auth | Managed auth or secure session-based auth | Avoid building authentication from scratch (still open which of the two — see note below) |
+| Containerization | Docker | Consistent development and deployment |
+| Cloud | Railway (was Google Cloud Run + Cloud SQL) | Simple container deployment with managed infrastructure |
+| CI/CD | GitHub Actions | Easy automated testing/deployment |
+| Testing | Go tests + Playwright + Vitest | Backend, end-to-end, and frontend coverage |
+
+Auth is the one line still open: "managed" (a third-party identity provider) vs. self-rolled
+session-based auth in Postgres are different enough in data ownership and portability that this
+should be pinned down as a real decision, not left as "or," before it's built.
 
 ## D4 — Activity
 
