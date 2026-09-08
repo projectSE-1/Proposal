@@ -37,8 +37,7 @@ Section 0 is the priority table; Sections 4–9 are the full requirement entries
 | LR5 | Owner IP — dataset/rules/formulas stay on approved infrastructure | Must |
 | CER-001 | Explainable calculation output | Must |
 | CER-002 | "Insufficient data" response, never a guess | Must |
-| CER-003 | Rule versioning and stored-calculation provenance | Must |
-| CER-004 | Deterministic engine, no external model dependency | Must |
+| CER-003 | Deterministic engine, no external model dependency | Must |
 | SEC-001 | Server-side authorization on formula access | Must |
 | SEC-002 | No confidential data in logs/errors/exports beyond scope | Must |
 | SEC-003 | Access-log implementation controls (append-only, tamper-evident) | Must |
@@ -76,9 +75,8 @@ formulas.
   real interview: a cosmetic-science student who formulates fragrance and is our real customer
   for this project (interviewed 2026-09-02; see `project-context.md` §3–§4). All FR/NFR/CER items in
   this backlog are written for her.
-- **Domain Expert** — governs approval of chemistry rules, thresholds, and material-group
-  changes. Not evidenced by the interview itself; sourced from `CLAUDE.md` and `rule.md`, which
-  both require a named human to approve any change to the interaction rules. Relevant to CER-003.
+- **Domain Expert** — supplies the material/rule dataset the engine operates on (rule.md §0).
+  Not evidenced by the interview itself; no in-app workflow this cycle.
 - **Administrator** — referenced in `project-context.md` §4 as a possible role. No admin-specific
   workflow is evidenced by the interview, and none is designed in this backlog beyond the
   server-side authorization guardrail that applies to any role (SEC-001). Open Question below.
@@ -284,11 +282,11 @@ Pain points 3 and 4 together: the user needs to trust and quickly understand why
 flagged, not just see a flag with no context.
 
 **User:**
-Formulator (and, indirectly, the Domain Expert reviewing output legitimacy).
+Formulator.
 
 **Requirement:**
 Any calculated value or restriction flag on the formula view must be traceable, on request, to
-the specific rule, threshold, source data, and rule version that produced it.
+the specific rule, threshold, and source data that produced it.
 
 **Precondition:**
 The engine has produced a result via FR-004/FR-005.
@@ -296,14 +294,14 @@ The engine has produced a result via FR-004/FR-005.
 **Main Flow:**
 1. User views a flagged or calculated item.
 2. User opens an explanation control (e.g., expand/tooltip — exact UI left to design).
-3. System shows the rule id, threshold value, source data reference, and rule version.
+3. System shows the rule id, threshold value, and source data reference.
 
 **Acceptance Criteria:**
 - Given any displayed calculated or flagged value, when the user requests an explanation, then
-  the system shows the rule(s)/threshold(s)/source data and rule version used — no unexplained
-  figure (rule.md rule 58; CLAUDE.md AI/Calculation Rules; rule 62).
+  the system shows the rule(s)/threshold(s)/source data used — no unexplained figure (rule.md
+  rule 58; CLAUDE.md AI/Calculation Rules).
 
-**Traceability:** Interview pain points 3 and 4; rule.md rules 58, 62.
+**Traceability:** Interview pain points 3 and 4; rule.md rule 58.
 
 ---
 
@@ -445,9 +443,9 @@ Login, formula list, formula view, calculation, rule-highlighting, and export (F
 must function correctly even if an AI/model service is unavailable.
 
 **Reason:**
-CLAUDE.md "Offline/Core Workflow"; rule.md rule 64 (LR4). Since no generative-AI feature is in
+CLAUDE.md "Offline/Core Workflow"; rule.md rule 62 (LR4). Since no generative-AI feature is in
 scope this cycle (confirmed via stakeholder meetings, project-context.md §17), this requirement
-is currently satisfied by construction — the engine is fully deterministic (CER-004). It is
+is currently satisfied by construction — the engine is fully deterministic (CER-003). It is
 recorded so a future AI-assisted feature cannot silently introduce a hard dependency into this
 workflow.
 
@@ -472,16 +470,15 @@ Every calculated value and rule flag the engine returns must carry the specific 
 threshold value(s), and source-data reference(s) used to produce it.
 
 **Input:**
-Formula data (materials + quantities), material dataset, rule set, thresholds, material groups,
-current rule version.
+Formula data (materials + quantities), material dataset, rule set, thresholds, material groups.
 
 **Output:**
 A calculated value or flag, paired with a citation bundle: rule id, threshold, source data
-reference, rule version.
+reference.
 
 **Acceptance Criteria:**
 - No numeric result or restriction flag is displayed without an accessible citation.
-- The citation includes the rule version (rule.md rules 58, 61, 62).
+- The citation includes rule id, threshold, and source data (rule.md rule 58).
 
 ---
 
@@ -505,30 +502,10 @@ A formula item lacking full rule coverage.
 
 ---
 
-### CER-003: Rule Versioning and Stored-Calculation Provenance
+### CER-003: Deterministic Engine, No External Model Dependency
 
 **Requirement:**
-Chemistry rules, thresholds, and material groups change only with a recorded domain-expert
-approval; each change is versioned; every calculation performed, including what-if recalculations
-(FR-007), records the rule version it used.
-
-**Input:**
-A rule/threshold/group change request plus a domain-expert approval record.
-
-**Output:**
-A versioned rule set; calculation results tagged with the rule version applied.
-
-**Acceptance Criteria:**
-- No rule/threshold/group change is applied without an approval record.
-- Every stored or displayed calculation shows which rule version produced it (rule.md rules 61,
-  62; CLAUDE.md AI/Calculation Rules).
-
----
-
-### CER-004: Deterministic Engine, No External Model Dependency
-
-**Requirement:**
-The calculations in CER-001–CER-003, and the values shown by FR-004/FR-005/FR-007, must come from
+The calculations in CER-001–CER-002, and the values shown by FR-004/FR-005/FR-007, must come from
 deterministic, project-approved logic operating on the internal dataset. The engine must not call
 an external generative-AI/LLM service to derive a material interaction, threshold, or
 restriction.
@@ -537,11 +514,11 @@ restriction.
 Internal material dataset and rule tables only.
 
 **Output:**
-A deterministic calculation, reproducible for the same formula and rule version.
+A deterministic calculation, reproducible for the same formula and rule set.
 
 **Acceptance Criteria:**
 - No calculation path sends formula, material, or rule data to an external AI/LLM/cloud service.
-- Given the same formula and rule version, recalculation produces identical output.
+- Given the same formula and rule set, recalculation produces identical output.
 
 **Traceability:** rule.md §4 framing; confirmed scope decision 3 (no generative-AI feature this
 cycle); CLAUDE.md AI/Calculation Rules.
@@ -623,7 +600,7 @@ model service (NFR-004).
 **Acceptance Criteria:**
 - CER-001, CER-002, and NFR-004 are all satisfied (see those entries).
 - A feedback channel exists for reporting a wrong calculated result, and each report is logged as
-  a defect (rule.md rule 65). Exact channel/UI is left to design — Open Question.
+  a defect (rule.md rule 63). Exact channel/UI is left to design — Open Question.
 
 **Traceability:** rule.md §4, rules 58–65; rule.md §5 LR4 (priority: Should).
 
@@ -791,7 +768,7 @@ provider is treated as a breach.
   computed weight/percentage, its group, and any applicable restriction — all on one view
   (FR-001–FR-005, NFR-001).
 - Any number or flag on that view can be explained: which rule, which threshold, which source
-  data, which rule version (FR-006, CER-001, CER-003).
+  data (FR-006, CER-001).
 - A material or pair with no covering rule shows "insufficient data," never a guess
   (FR-003/FR-005, CER-002).
 - Editing a value in the open formula recalculates in place, without saving or reloading, so the
@@ -805,7 +782,7 @@ provider is treated as a breach.
 - Nothing in the dataset, rules, thresholds, groups, or saved formulas is sent to an unapproved
   external service or made public (LR5, IP-001–IP-004).
 - No path in the core workflow depends on an external AI/model service; there is no
-  generative-AI feature in this build (NFR-004, CER-004).
+  generative-AI feature in this build (NFR-004, CER-003).
 
 ---
 
@@ -844,9 +821,6 @@ These cannot be resolved from the single interview available and must not be gue
 10. **Administrator role's exact capabilities** are not evidenced by the interview and are out of
     scope this cycle beyond the general server-side authorization requirement (SEC-001) that
     applies to any role.
-11. **Domain-expert approval workflow mechanics.** CER-003 establishes that an approval record
-    must exist before a rule/threshold/group change is applied, but not how that approval is
-    submitted or captured in-system. Open Question for design.
 
 ---
 

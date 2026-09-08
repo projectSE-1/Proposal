@@ -6,12 +6,7 @@ Rendered as Mermaid (GitHub and most Markdown viewers render these natively); so
 alternatives (draw.io/Figma/PlantUML) can replace these later without changing what they show.
 
 **Domain Expert** appears only in D1, as the external source of the material/rule dataset (rule.md
-rule 11) — not as a system use case. This build cycle has no in-app "approve rule/threshold
-change" flow: LR3 (`backlog.md`) confirms no production-approval flow is in scope this cycle, and
-`feature-list.md`/`user-journey.md` have no domain-expert use case. CER-003 (rule versioning + a
-recorded approval before a rule change is applied) still holds as a data-model requirement — the
-approval can happen out-of-band (the same channel the domain expert already uses to supply the
-dataset), it just isn't a UI feature this cycle.
+§0) — not as a system use case; see `backlog.md` §2 Users for why.
 
 ## D1 — System Context
 
@@ -26,7 +21,7 @@ flowchart LR
     Dataset[(Material & Rule Dataset)]
 
     Formulator -->|logs in, views & evaluates formulas| System
-    DomainExpert -->|supplies & approves dataset/rules, out-of-band| Dataset
+    DomainExpert -->|supplies dataset/rules| Dataset
     System -->|reads/writes| Dataset
 
     classDef actor fill:#fff,stroke:#333,stroke-width:2px,font-weight:bold;

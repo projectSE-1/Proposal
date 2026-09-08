@@ -249,13 +249,9 @@ so the Air Canada rule applies: **we own what our system says.**
 59. If the engine has no rule covering a material pair, it must return "insufficient data", never a guessed value.
 60. Any generative/LLM feature must be labelled as a suggestion, must cite the dataset rows it used, and must
     never invent a material, a CAS number, a concentration limit, or a safety claim.
-61. A named human (the domain expert) must approve any change to the interaction rules, thresholds or group
-    definitions; the agent must not "improve" the chemistry logic on its own initiative.
-62. Rule changes must be versioned, and every stored calculation must record `rule_version` so old results stay
-    reproducible.
-63. Every safety-relevant output must carry the disclaimer agreed with the owner and a human-override path.
-64. The core workflow (browse materials, record a formula) must still work when the AI/model service is down.
-65. Users must have a feedback channel to report a wrong result, and every report must be logged as a defect.
+61. Every safety-relevant output must carry the disclaimer agreed with the owner and a human-override path.
+62. The core workflow (browse materials, record a formula) must still work when the AI/model service is down.
+63. Users must have a feedback channel to report a wrong result, and every report must be logged as a defect.
 
 ---
 

@@ -210,8 +210,6 @@ A classification/grouping of aroma materials.
 
 Material groups may be used by the calculation engine and interaction rules.
 
-Changes to material groups require domain-expert approval.
-
 ---
 
 ## Synergy
@@ -282,7 +280,6 @@ Every important calculated result should identify, where applicable:
 * Rules used
 * Relevant thresholds
 * Source data
-* Applicable rule version
 
 The system should allow a user/domain expert to understand why the system produced a result.
 
@@ -293,21 +290,6 @@ If the engine does not have enough information to produce a supported result, it
 > `insufficient data`
 
 It must not guess unsupported chemical/material interactions.
-
-## Rule Changes
-
-Changes to:
-
-* Chemistry rules
-* Thresholds
-* Material groups
-* Interaction rules
-
-require approval from the domain expert.
-
-Rules must be versioned.
-
-Stored calculations should record the applicable rule version.
 
 ---
 
@@ -801,7 +783,6 @@ AI should execute well-defined work rather than independently inventing product 
 * Chemistry/domain rules
 * Whether a requirement is acceptable
 * Whether a design is acceptable
-* Domain-expert approval
 * Important security/privacy decisions
 
 ## AI can assist with

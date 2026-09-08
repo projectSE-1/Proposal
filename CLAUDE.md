@@ -32,7 +32,6 @@
 - Enforce authorization server-side; never rely on client-side UI hiding.
 - Never expose passwords or sensitive personal data — including in logs, error messages, or AI prompts.
 - The calculation engine must be explainable: every result cites the rules, thresholds, and source data used. If it lacks enough information, return `insufficient data` — never guess a chemical/material interaction.
-- Chemistry rules, thresholds, and material groups change only with domain-expert approval; every change is versioned, and stored calculations record the rule version applied.
 - The core formulation/calculation workflow must keep working if the AI/model service is down.
 
 ## Development principles
